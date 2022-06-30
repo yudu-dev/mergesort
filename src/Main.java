@@ -1,13 +1,26 @@
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        File file = new File("hugeFileForTest.txt");
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            byte[] partOfHugeFile = new byte[(int) (5*Math.pow(10, 7))];
+
+            randomAccessFile.seek(0);
+            int count = randomAccessFile.read(partOfHugeFile);
+            System.out.println(new String(partOfHugeFile, 0, count));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         int[] arr = {23,45,2,6,8,1,33,89,0};
         mergeSort(arr, 0, arr.length-1);
         Generator generator = new Generator();
-        generator.makeFile(2, 3);
+        generator.makeFile(200, 50);
         System.out.println(Arrays.toString(arr));
 
     }
