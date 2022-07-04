@@ -1,5 +1,9 @@
 # ignored files
 /hugeFileForTest.txt
+/sortedHugeFile.txt
 /lengthOfLine.txt
 /rowCount.txt
 /tmp_1.txt
+/tmp_2.txt
+/tmp_3.txt
+/tmp_4.txt
