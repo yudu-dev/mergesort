@@ -13,34 +13,23 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Do you want to make a file? (Y/N)");
+        System.out.println("Do you want to create a file? (Y/N)");
         String next = scanner.nextLine();
-        int rowCount = 100;
-        int maxRowLength = 100;
+        int rowCount = 0;
+        int maxRowLength = 0;
         if (next.equals("Y") || next.equals("y")) {
-            System.out.println("Set number of lines in new file");
-            try {
-                rowCount = Integer.parseInt(scanner.nextLine());
-                if (rowCount <= 0) {
-                    rowCount = 100;
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException ex) {
-                System.out.println("Wrong number of lines. Number of lines will be set '100'");
-            }
-            System.out.println("Set length of each lines in new file");
-            try {
-                maxRowLength = Integer.parseInt(scanner.nextLine());
-                if (maxRowLength <= 0) {
-                    maxRowLength = 100;
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException ex) {
-                System.out.println("Wrong length of line. Length of each lines will be set '100'");
-            }
+            rowCount = FileSplitSortUtil.gettingInt("number of lines", rowCount, scanner);
+            maxRowLength = FileSplitSortUtil.gettingInt("length of each lines", maxRowLength, scanner);
             Generator generator = new Generator(rowCount, maxRowLength);
             generator.makeFile("hugeFileForTest.txt");
             generator.makeRowsLengthFiles();
+        } else {
+            File file = new File("hugeFileForTest.txt");
+            if (file.exists()) {
+            } else {
+                System.out.println("First you need to create a file.\nThe program will be terminated.");
+                System.exit(0);
+            }
         }
 
         rowCount = FileSplitSortUtil.readInteger("rowCount.txt");
@@ -48,7 +37,6 @@ public class Main {
 
         File file = new File("hugeFileForTest.txt");
         long size = file.length();
-
         long approximateNumberOfCuts = size / 250_000_000;
         int countOfTempFiles = 0;
 

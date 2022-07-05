@@ -1,6 +1,9 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class FileSplitSortUtil {
     public static void mergeSort(String[] strArr, int start, int end) {
@@ -46,6 +49,20 @@ public class FileSplitSortUtil {
         int intValue = 0;
         while ((intLine = reader.readLine()) != null) {
             intValue = Integer.parseInt(intLine);
+        }
+        return intValue;
+    }
+
+    public static int gettingInt(String strValue, int intValue, @NotNull Scanner scanner) {
+        System.out.println("Set " + strValue + " in new file");
+        try {
+            intValue = Integer.parseInt(scanner.nextLine());
+            if (intValue <= 0) {
+                intValue = 100;
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException ex) {
+            System.out.println("Wrong " + strValue + ". " + strValue + "will be set '100'");
         }
         return intValue;
     }
