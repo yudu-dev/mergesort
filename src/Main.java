@@ -9,7 +9,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you want to create a file? (Y/N)");
         String next = scanner.nextLine();
-        if (next.equals("Y") || next.equals("y")) {
+        if (next.equalsIgnoreCase("y")) {
             rowCount = FileSplitSortUtil.gettingInt("number of lines", rowCount, scanner);
             maxRowLength = FileSplitSortUtil.gettingInt("length of each lines", maxRowLength, scanner);
             Generator generator = new Generator();
@@ -18,8 +18,7 @@ public class Main {
             generator.makeRowsLengthFiles("lengthOfLine.txt", maxRowLength);
         } else {
             File file = new File("hugeFileForTest.txt");
-            if (file.exists()) {
-            } else {
+            if (!file.exists()) {
                 System.out.println("First you need to create a file.\nThe program will be terminated.");
                 System.exit(0);
             }

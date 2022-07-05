@@ -1,4 +1,3 @@
-import org.jetbrains.annotations.NotNull;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -76,7 +75,7 @@ public class FileSplitSortUtil {
      * @param intValue переменная, получаемая из консоли
      * @param scanner сканер для четния информации из консоли
      */
-    public static int gettingInt(String strValue, int intValue, @NotNull Scanner scanner) {
+    public static int gettingInt(String strValue, int intValue, Scanner scanner) {
         System.out.println("Set " + strValue + " in new file");
         try {
             intValue = Integer.parseInt(scanner.nextLine());
@@ -141,7 +140,12 @@ public class FileSplitSortUtil {
             // запуск метода для создания большого отсортированного файла из временных файлов
             FileSplitSortUtil.makeSortedFile((int) numberOfCuts);
         } else {
-            System.out.println("Количество строк некратно количеству временных файлов");
+            System.out.println("""
+                    "Количество строк некратно количеству временных файлов"
+                    К сожалению, из-за большого загруза на работе,
+                    я не успел реализовать ветку программы для случая,
+                    когда количество строк в файле некратно количеству временных файлов.
+                    Это необходимо было сделать, чтобы избежать потерю данных при сортировке.""");
             // тут должно быть описано условие запуска метода разбиения большого файла на временные
             // при количестве строк некратному количеству временных файлов
         }
