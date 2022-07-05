@@ -6,22 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-
-    private static int readInteger(String nameFiles) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(nameFiles));
-        String intLine;
-        int intValue = 0;
-        while ((intLine = reader.readLine()) != null) {
-            intValue = Integer.parseInt(intLine);
-        }
-        return intValue;
-    }
-
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you want to make a file? (Y/N)");
@@ -54,25 +43,27 @@ public class Main {
             generator.makeRowsLengthFiles();
         }
 
-        rowCount = Main.readInteger("rowCount.txt");
-        maxRowLength = Main.readInteger("lengthOfLine.txt");
+        rowCount = FileSplitSortUtil.readInteger("rowCount.txt");
+        maxRowLength = FileSplitSortUtil.readInteger("lengthOfLine.txt");
 
         File file = new File("hugeFileForTest.txt");
         long size = file.length();
 
         long approximateNumberOfCuts = size / 250_000_000;
+        int countOfTempFiles = 0;
 
         if (rowCount % 2 == 0) {
             int countRowInCuts = (int) (rowCount / approximateNumberOfCuts);
             for (int i = 0; i < approximateNumberOfCuts; i++) {
-                File temporaryFile = new File("tmp_" + (i + 1) + ".txt");
+                File temporaryFile = new File("tmp_" + (i + 1) + ".temp");
+                countOfTempFiles += 1;
                 try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
                     byte[] partOfHugeFile = new byte[countRowInCuts * maxRowLength + countRowInCuts - 1];
                     randomAccessFile.seek((long) i * partOfHugeFile.length + i);
                     int count = randomAccessFile.read(partOfHugeFile);
                     String strPartOfHugeFile = new String(partOfHugeFile, 0, count);
                     String[] strArray = strPartOfHugeFile.split("\n");
-                    Algorithm.mergeSort(strArray, 0, strArray.length - 1);
+                    FileSplitSortUtil.mergeSort(strArray, 0, strArray.length - 1);
                     try (OutputStream outputStream = new FileOutputStream(temporaryFile);
                          BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream))) {
                         for (String s : strArray) {
@@ -87,10 +78,13 @@ public class Main {
                 }
             }
             File sortedHugeFile = new File("sortedHugeFile.txt");
+            PrintWriter writer = new PrintWriter(sortedHugeFile);
+            writer.print("");
+            writer.close();
             String[] strArrayForComparing = new String[(int) approximateNumberOfCuts];
             BufferedReader[] readers = new BufferedReader[(int) approximateNumberOfCuts];
             for (int i = 0; i < approximateNumberOfCuts; i++) {
-                readers[i] = new BufferedReader(new FileReader("tmp_" + (i + 1) + ".txt"));
+                readers[i] = new BufferedReader(new FileReader("tmp_" + (i + 1) + ".temp"));
             }
             boolean noMoreLine = false;
             while (!noMoreLine) {
@@ -99,8 +93,8 @@ public class Main {
                     String line = reader.readLine();
                     counterOfFiles += 1;
                     strArrayForComparing[counterOfFiles-1] = line;
-                    if (counterOfFiles == 4) {
-                        Algorithm.mergeSort(strArrayForComparing, 0, strArrayForComparing.length - 1);
+                    if (counterOfFiles == countOfTempFiles) {
+                        FileSplitSortUtil.mergeSort(strArrayForComparing, 0, strArrayForComparing.length - 1);
                         try (OutputStream outputStream = new FileOutputStream(sortedHugeFile, true);
                              BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream))) {
                             for (String s : strArrayForComparing) {
@@ -117,16 +111,18 @@ public class Main {
                         System.out.println("no more line");
                         break;
                     }
-
                 }
+            }
+            try {
+                for (int i = 0; i < approximateNumberOfCuts; i++) {
+                    File temporaryFile = new File("tmp_" + (i + 1) + ".temp");
+                    temporaryFile.delete();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
-
-        //int[] intArr = {23,45,2,6,8,1,33,89,0};
-        //Algorithm.mergeSort(intArr, 0, intArr.length-1);
-        //System.out.println(Arrays.toString(intArr));
-
     }
-
 }

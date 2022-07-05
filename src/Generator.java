@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
@@ -78,7 +76,6 @@ public class Generator {
                     result = Math.round(Math.random()*25+65);
                     countOfRepeatedChars = random.nextInt(4)+1;
                     if (i + countOfRepeatedChars > length) {
-                        //i = length-1;
                         countOfRepeatedChars = length-i;
                         sb.append(String.valueOf((char)result).repeat(countOfRepeatedChars));
                         i = length-1;
@@ -92,7 +89,6 @@ public class Generator {
                     result = Math.round(Math.random()*25+97);
                     countOfRepeatedChars = random.nextInt(4)+1;
                     if (i + countOfRepeatedChars > length) {
-                        //i = length-1;
                         countOfRepeatedChars = length-i;
                         sb.append(String.valueOf((char)result).repeat(countOfRepeatedChars));
                         i = length-1;
@@ -105,7 +101,6 @@ public class Generator {
                     countOfRepeatedChars = random.nextInt(4)+1;
                     // возвращает случайное число 0-9
                     if (i + countOfRepeatedChars > length) {
-                        //i = length-1;
                         countOfRepeatedChars = length-i;
                         sb.append(String.valueOf(new Random().nextInt(10)).repeat(countOfRepeatedChars));
                         i = length-1;

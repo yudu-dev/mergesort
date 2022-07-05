@@ -1,4 +1,8 @@
-public class Algorithm {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileSplitSortUtil {
     public static void mergeSort(String[] strArr, int start, int end) {
         if (start>=end) {
             return;
@@ -34,45 +38,17 @@ public class Algorithm {
         while (rc < rLength) {
             strArr[left++] = rArray[rc++];
         }
-
     }
 
-    public static void mergeSort(int[] intArr, int start, int end) {
-        if (start>=end) {
-            return;
+    public static int readInteger(String nameFiles) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(nameFiles));
+        String intLine;
+        int intValue = 0;
+        while ((intLine = reader.readLine()) != null) {
+            intValue = Integer.parseInt(intLine);
         }
-        int half = start+(end-start)/2;
-        mergeSort(intArr, start, half);
-        mergeSort(intArr, half+1, end);
-        merge(intArr, start, half, end);
+        return intValue;
     }
 
-    private static void merge(int[] intArr, int left, int middle, int right) {
-        int lLength = middle-left+1;
-        int rLength = right-middle;
-        int[] lArray = new int[lLength];
-        int[] rArray = new int[rLength];
-        for (int i = 0; i < lLength; i++) {
-            lArray[i] = intArr[left+i];
-        }
-        for (int i = 0; i < rLength; i++) {
-            rArray[i] = intArr[middle+1+i];
-        }
-        int lc = 0, rc = 0;
-        while (lc < lLength && rc < rLength) {
-            if (lArray[lc] < rArray[rc]) {
-                intArr[left++] = lArray[lc++];
-            } else {
-                intArr[left++] = rArray[rc++];
-            }
-        }
-        while (lc < lLength) {
-            intArr[left++] = lArray[lc++];
-        }
-        while (rc < rLength) {
-            intArr[left++] = rArray[rc++];
-        }
-
-    }
 
 }
